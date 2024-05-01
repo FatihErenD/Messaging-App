@@ -16,7 +16,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -100,7 +101,32 @@ public class Controller {
 
     @FXML
     void onLoginButtonClick(ActionEvent event) {
+        if (Objects.equals(username.getText(), "") || Objects.equals(password.getText(), "")) {
+            yanlisHesap.setText("Kullanıcı adı veya şifrenizi girmediniz.");
+        }
+        else {
+            try (BufferedReader reader = new BufferedReader(new FileReader("hesaplar.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.equals(username.getText())) {
+                        line = reader.readLine();
+                        if (Objects.equals(line, password.getText())) {
+                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
+                            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            scene = new Scene(root);
+                            stage.setTitle("");
+                            stage.setScene(scene);
+                            stage.show();
+                        }
+                        yanlisHesap.setText("Şifre Yanlış");
+                    }
+                }
+                yanlisHesap.setText("Kullanıcı Bulunamadı");
+            } catch (IOException e) {
+                System.out.println("Giriş yapılamıyor.");
+            }
 
+        }
     }
 
     @FXML
