@@ -11,7 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 import java.io.IOException;
 import java.util.Objects;
@@ -58,6 +60,15 @@ public class Controller {
     private Label hesapYanlis;
 
     @FXML
+    private Label user_name;
+
+    @FXML
+    private VBox vBox;
+
+    @FXML
+    private VBox vBox_Messages;
+
+    @FXML
     void onCreateAccount(MouseEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("create.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -83,12 +94,17 @@ public class Controller {
     }
 
     @FXML
-    void onMouseEntered(MouseEvent event) {
+    void OnCreate(ActionEvent event) {
 
     }
 
     @FXML
-    void OnCreate(ActionEvent event) {
+    void onSentClicked(MouseEvent event) {
+
+    }
+
+    @FXML
+    void onExitClicked(MouseEvent event) {
 
     }
 }
