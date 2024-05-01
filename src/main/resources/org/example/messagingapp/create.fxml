@@ -37,7 +37,7 @@
                </font>
             </Button>
             <Label fx:id="yanlisHesap" alignment="CENTER" layoutX="45.0" layoutY="220.0" prefHeight="17.0" prefWidth="330.0" textFill="#cd3636" underline="true" />
-            <Label fx:id="login" layoutX="237.0" layoutY="365.0" onDragDetected="#onLogin" onMouseClicked="#onCreateAccount" onMouseEntered="#onMouseEntered" stylesheets="@css-file.css" text="Giriş Yap" textFill="#908ff8" underline="true">
+            <Label fx:id="login" layoutX="237.0" layoutY="365.0" onMouseClicked="#onAlreadyHave" stylesheets="@css-file.css" text="Giriş Yap" textFill="#908ff8" underline="true">
                <font>
                   <Font name="Serif Regular" size="14.0" />
                </font>
