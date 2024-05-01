@@ -1,0 +1,73 @@
+.button
+{
+    -fx-background-color :  #b3b3b3;
+    -fx-background-radius: 20;
+}
+.button:hover
+{
+    -fx-background-color : #c6cdd5;
+    -fx-background-radius: 20;
+}
+.button:pressed
+{
+    -fx-border-radius : 20;
+    -fx-border-width : 2;
+    -fx-border-color : #0d1117;
+}
+
+.newLabel
+{
+    -fx-background-color:  #252525;
+    -fx-background-radius: 10;
+    -fx-text-fill: #908ff8;
+    -fx-font-family: Consolas;
+    -fx-font-size: 18px;
+}
+.newLabel:hover
+{
+    -fx-background-color : #404040;
+}
+
+.textField
+{
+    -fx-background-color :  #b3b3b3;
+    -fx-background-radius: 30;
+    -fx-border-color:  #404040;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+}
+.textField:focused
+{
+    -fx-background-color :  #f8f8f8;
+    -fx-background-radius: 30;
+    -fx-border-color:  #404040;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+}
+
+.label
+{
+    -fx-text-fill :  #283fa8;
+}
+.label:hover
+{
+    -fx-text-fill :  #445cc7;
+}
+
+.labelMessageSent
+{
+    -fx-background-color:  #252525;
+    -fx-background-radius:  15;
+    -fx-font-family: Consolas;
+    -fx-font-size: 18px;
+    -fx-text-fill: #e1d9ff;
+}
+
+.labelMessageRecieved
+{
+    -fx-background-color:  #5f5fd3;
+    -fx-background-radius:  15;
+    -fx-font-family: Consolas;
+    -fx-font-size: 18px;
+    -fx-text-fill: #e1d9ff;
+}
