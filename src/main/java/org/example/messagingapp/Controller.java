@@ -37,6 +37,27 @@ public class Controller {
     private Label yanlisHesap;
 
     @FXML
+    private Button Create;
+
+    @FXML
+    private Label login;
+
+    @FXML
+    private TextField name_create;
+
+    @FXML
+    private PasswordField password_create1;
+
+    @FXML
+    private PasswordField password_create2;
+
+    @FXML
+    private TextField username_create;
+
+    @FXML
+    private Label hesapYanlis;
+
+    @FXML
     void onCreateAccount(MouseEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("create.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
