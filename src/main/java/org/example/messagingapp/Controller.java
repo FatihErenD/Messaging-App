@@ -18,6 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -103,7 +105,18 @@ public class Controller {
 
     @FXML
     void OnCreate(ActionEvent event) {
+        try {
+            FileWriter fw = new FileWriter("hesaplar.txt", true);
+            BufferedWriter writer = new BufferedWriter(fw);
 
+            writer.append(username_create.getText()+"\n");
+            writer.append(password_create1.getText()+"\n");
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
