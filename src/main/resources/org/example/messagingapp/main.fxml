@@ -23,8 +23,8 @@
             </VBox>
             <Pane layoutY="482.0" prefHeight="72.0" prefWidth="680.0" style="-fx-background-color: #252525;">
                <children>
-                  <TextField layoutX="14.0" layoutY="15.0" prefHeight="34.0" prefWidth="580.0" styleClass="textField" stylesheets="@css-file.css" />
-                  <ImageView fitHeight="31.0" fitWidth="32.0" layoutX="622.0" layoutY="17.0" onMouseClicked="#onSentClicked">
+                  <TextField fx:id="messageField" layoutX="14.0" layoutY="15.0" prefHeight="34.0" prefWidth="580.0" styleClass="textField" stylesheets="@css-file.css" />
+                  <ImageView fx:id="sendButton" fitHeight="31.0" fitWidth="32.0" layoutX="622.0" layoutY="17.0" onMouseClicked="#onSentClicked">
                      <image>
                         <Image url="@pngs/send.256x249.png" />
                      </image>
