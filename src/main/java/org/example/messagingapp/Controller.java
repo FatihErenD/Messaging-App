@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Controller{
+public class Controller {
     private Scene scene;
     private Stage stage;
     private Parent root;

@@ -26,6 +26,7 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 String message = scanner.nextLine();
+                System.out.println("asdfd");
                 writer.write(message);
                 writer.newLine();
                 writer.flush();
@@ -44,6 +45,7 @@ public class Client {
                 while (socket.isConnected()) {
                     try {
                         receivedMessage = reader.readLine();
+                        System.out.println(receivedMessage);
                     } catch (IOException e) {
                         closeServer(socket, reader, writer);
                     }

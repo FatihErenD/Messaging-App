@@ -20,10 +20,9 @@ public class ClientHandler implements Runnable{
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = reader.readLine();
             clientHandlers.add(this);
-            broadcastMessage(clientUsername + "gruba katıldı!");
         }
         catch (IOException e) {
-            closeEverything(socket, reader, writer);
+            closeServer(socket, reader, writer);
             e.printStackTrace();
         }
     }
@@ -39,7 +38,7 @@ public class ClientHandler implements Runnable{
                 messageFromClient = reader.readLine();
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
-                closeEverything(socket, reader, writer);
+                closeServer(socket, reader, writer);
                 break;
             }
         }
@@ -56,17 +55,16 @@ public class ClientHandler implements Runnable{
                 }
             }
             catch(IOException e) {
-                closeEverything(socket, reader, writer);
+                closeServer(socket, reader, writer);
             }
         }
     }
 
     public void removeClientHandler() {
         clientHandlers.remove(this);
-        broadcastMessage(clientUsername + "sohbetten ayrıldı.");
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void closeServer(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
         removeClientHandler();
         try {
             if (bufferedReader != null) {
