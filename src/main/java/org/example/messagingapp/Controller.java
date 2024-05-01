@@ -111,12 +111,9 @@ public class Controller {
                     if (line.equals(username.getText())) {
                         line = reader.readLine();
                         if (Objects.equals(line, password.getText())) {
-                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
                             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            scene = new Scene(root);
-                            stage.setTitle("");
-                            stage.setScene(scene);
-                            stage.show();
+                            changeScene(stage, "main");
+                            break;
                         }
                         yanlisHesap.setText("Şifre Yanlış");
                     }
@@ -125,7 +122,6 @@ public class Controller {
             } catch (IOException e) {
                 System.out.println("Giriş yapılamıyor.");
             }
-
         }
     }
 
@@ -135,10 +131,22 @@ public class Controller {
             FileWriter fw = new FileWriter("hesaplar.txt", true);
             BufferedWriter writer = new BufferedWriter(fw);
 
+            if (!password_create1.getText().equals(password_create2.getText())) {
+                hesapYanlis.setText("Şifreni doğru gir hocam");
+                return;
+            }
+
             writer.append(username_create.getText()+"\n");
             writer.append(password_create1.getText()+"\n");
 
             writer.close();
+
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setTitle("");
+            stage.setScene(scene);
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -153,6 +161,18 @@ public class Controller {
     @FXML
     void onExitClicked(MouseEvent event) {
 
+    }
+
+    private void changeScene(Stage stage, String fxmlName) {
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlName + ".fxml")));
+            scene = new Scene(root);
+            stage.setTitle("");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Yüklenemedi...");
+        }
     }
 
 
