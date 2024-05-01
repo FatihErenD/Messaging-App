@@ -11,26 +11,21 @@
    <children>
       <Pane layoutX="236.0" layoutY="122.0" prefHeight="417.0" prefWidth="528.0" style="-fx-background-color: #282828; -fx-background-radius: 15;">
          <children>
-            <Label alignment="CENTER" layoutX="90.0" layoutY="14.0" prefHeight="63.0" prefWidth="348.0" text="Hesap Oluştur" textFill="#47479e">
+            <Label alignment="CENTER" layoutX="90.0" layoutY="38.0" prefHeight="63.0" prefWidth="348.0" text="Hesap Oluştur" textFill="#47479e">
                <font>
                   <Font name="Serif Bold" size="54.0" />
                </font>
             </Label>
-            <Label layoutX="106.0" layoutY="113.0" text="Kullanıcı Adı:" textFill="#47479e">
+            <Label layoutX="106.0" layoutY="158.0" text="Kullanıcı Adı:" textFill="#47479e">
                <font>
                   <Font name="Serif Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="username_create" layoutX="234.0" layoutY="107.0" prefHeight="25.0" prefWidth="215.0" styleClass="textField" stylesheets="@css-file.css">
+            <TextField fx:id="username_create" layoutX="234.0" layoutY="152.0" prefHeight="25.0" prefWidth="215.0" styleClass="textField" stylesheets="@css-file.css">
                <font>
                   <Font name="Serif Regular" size="15.0" />
                </font>
             </TextField>
-            <Label layoutX="173.0" layoutY="160.0" text="İsim:" textFill="#47479e">
-               <font>
-                  <Font name="Serif Bold" size="18.0" />
-               </font>
-            </Label>
             <Button fx:id="Create" layoutX="194.0" layoutY="316.0" mnemonicParsing="false" onAction="#OnCreate" prefHeight="40.0" prefWidth="141.0" stylesheets="@css-file.css" text="Oluştur" textFill="#47479e">
                <font>
                   <Font name="Serif Bold" size="22.0" />
@@ -52,11 +47,6 @@
                   <Font name="Serif Regular" size="15.0" />
                </font>
             </PasswordField>
-            <TextField fx:id="name_create" layoutX="234.0" layoutY="154.0" prefHeight="25.0" prefWidth="215.0" styleClass="textField" stylesheets="@css-file.css">
-               <font>
-                  <Font name="Serif Regular" size="15.0" />
-               </font>
-            </TextField>
             <Label layoutX="37.0" layoutY="254.0" text="Şifreyi Tekrar Giriniz:" textFill="#47479e">
                <font>
                   <Font name="Serif Bold" size="18.0" />

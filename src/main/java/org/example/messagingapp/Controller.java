@@ -48,9 +48,6 @@ public class Controller {
     private Label login;
 
     @FXML
-    private TextField name_create;
-
-    @FXML
     private PasswordField password_create1;
 
     @FXML
@@ -111,13 +108,7 @@ public class Controller {
 
     @FXML
     void onSentClicked(MouseEvent event) {
-        String message = messageField.getText();
-        if (!message.isEmpty()) {
-            HBox hbox = new HBox();
-            hbox.setAlignment(Pos.CENTER_RIGHT);
-            hbox.setPadding(new Insets(5, 5, 5, 10));
 
-        }
     }
 
     @FXML
