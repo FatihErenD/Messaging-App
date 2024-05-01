@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #404040;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.messagingapp.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #404040;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.messagingapp.Controller">
    <children>
       <Pane layoutX="284.0" layoutY="138.0" prefHeight="341.0" prefWidth="432.0" style="-fx-background-color: #282828; -fx-background-radius: 15;">
          <children>
