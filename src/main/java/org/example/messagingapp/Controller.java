@@ -1,11 +1,8 @@
 package org.example.messagingapp;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,16 +16,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.URL;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller{
     private Scene scene;
     private Stage stage;
     private Parent root;
@@ -83,26 +76,6 @@ public class Controller implements Initializable {
 
     private Server server;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            server = new Server(new ServerSocket(1234));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Server olusturulamadi");
-        }
-
-        server.receiveMessageFromClient(vBox_Messages);
-
-        vBox_Messages.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-
-            }
-        });
-
-    }
 
 
 

@@ -8,22 +8,22 @@ public class ClientHandler implements Runnable{
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
-    private BufferedReader bfReader;
-    private BufferedWriter bfWriter;
+    private BufferedReader reader;
+    private BufferedWriter writer;
 
     private String clientUsername;
 
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
-            this.bfWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bfReader = new BufferedReader(new InputStreamWriter(socket.getInputStream()));
-            this.clientUsername = bfReader.readLine();
+            this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.clientUsername = reader.readLine();
             clientHandlers.add(this);
             broadcastMessage(clientUsername + "gruba katıldı!");
         }
         catch (IOException e) {
-            closeEverything(socket, bfReader, bfWriter);
+            closeEverything(socket, reader, writer);
             e.printStackTrace();
         }
     }
@@ -36,10 +36,10 @@ public class ClientHandler implements Runnable{
         while(socket.isConnected()) {
             try
             {
-                messageFromClient = bfReader.readLine();
+                messageFromClient = reader.readLine();
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
-                closeEverything(socket, bfReader, bfWriter);
+                closeEverything(socket, reader, writer);
                 break;
             }
         }
@@ -49,14 +49,14 @@ public class ClientHandler implements Runnable{
         for (ClientHandler clientHandler: clientHandlers) {
             try {
                 if (!clientHandler.clientUsername.equals(this.clientUsername)) {
-                    clientHandler.bfWriter.write(message);
-                    clientHandler.bfWriter.newLine();
+                    clientHandler.writer.write(message);
+                    clientHandler.writer.newLine();
                     //zorla gönder
-                    clientHandler.bfWriter.flush();
+                    clientHandler.writer.flush();
                 }
             }
             catch(IOException e) {
-                closeEverything(socket, bfReader, bfWriter);
+                closeEverything(socket, reader, writer);
             }
         }
     }
