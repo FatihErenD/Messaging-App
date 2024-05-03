@@ -18,7 +18,6 @@ public class ClientHandler implements Runnable{
             this.socket = socket;
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = reader.readLine();
             clientHandlers.add(this);
         }
         catch (IOException e) {
@@ -31,7 +30,6 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         String messageFromClient;
-
         while(socket.isConnected()) {
             try
             {
@@ -47,12 +45,12 @@ public class ClientHandler implements Runnable{
     public void broadcastMessage(String message) {
         for (ClientHandler clientHandler: clientHandlers) {
             try {
-                if (!clientHandler.clientUsername.equals(this.clientUsername)) {
-                    clientHandler.writer.write(message);
-                    clientHandler.writer.newLine();
-                    //zorla gönder
-                    clientHandler.writer.flush();
-                }
+                //if (!clientHandler.clientUsername.equals(this.clientUsername)) {
+                clientHandler.writer.write(message);
+                clientHandler.writer.newLine();
+                //zorla gönder
+                clientHandler.writer.flush();
+                //}
             }
             catch(IOException e) {
                 closeServer(socket, reader, writer);
@@ -80,5 +78,5 @@ public class ClientHandler implements Runnable{
         catch (IOException e) {
             e.printStackTrace();
         }
-     }
+    }
 }

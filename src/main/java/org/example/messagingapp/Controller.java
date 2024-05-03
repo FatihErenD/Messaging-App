@@ -3,6 +3,7 @@ package org.example.messagingapp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,12 +23,16 @@ import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.Socket;
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
+    private Client client;
 
     @FXML
     private Label hesap;
@@ -74,29 +79,16 @@ public class Controller {
     @FXML
     private TextField messageField;
 
-    private Server server;
-
-
-
-
     @FXML
-    void onCreateAccount(MouseEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("create.fxml")));
+    void onCreateAccount(MouseEvent event) {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle("");
-        stage.setScene(scene);
-        stage.show();
+        changeScene(stage, "create");
     }
 
     @FXML
-    void onAlreadyHave(MouseEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login.fxml")));
+    void onAlreadyHave(MouseEvent event) {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle("");
-        stage.setScene(scene);
-        stage.show();
+        changeScene(stage, "login");
     }
 
     @FXML
@@ -141,12 +133,8 @@ public class Controller {
 
             writer.close();
 
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("");
-            stage.setScene(scene);
-            stage.show();
+            changeScene(stage, "login");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -155,12 +143,33 @@ public class Controller {
 
     @FXML
     void onSentClicked(MouseEvent event) {
+        if (messageField.getText() != "") {
+            String message = messageField.getText();
+            messageField.clear();
+            client.sendMessage(message);
 
+            HBox hbox = new HBox(100);
+            hbox.setAlignment(Pos.CENTER_RIGHT);
+            hbox.setPadding(new Insets(5, 5, 5, 10));
+            hbox.setSpacing(3);
+
+            Label label = new Label(message);
+            label.setStyle("""
+                        -fx-background-color:  #252525;
+                        -fx-background-radius:  15;
+                        -fx-font-family: Consolas;
+                        -fx-font-size: 18px;
+                        -fx-text-fill: #e1d9ff;""");
+            hbox.getChildren().add(label);
+
+            vBox_Messages.getChildren().add(hbox);
+        }
     }
 
     @FXML
     void onExitClicked(MouseEvent event) {
-
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        changeScene(stage, "login");
     }
 
     private void changeScene(Stage stage, String fxmlName) {
@@ -175,5 +184,13 @@ public class Controller {
         }
     }
 
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            client = new Client(new Socket("localhost", 1234));
+        } catch (IOException e) {
+            System.out.println("Kullanıcı oluşturulamadı.");
+        }
+        client.receiveMessage();
+    }
 }
