@@ -7,13 +7,15 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Client {
     private Socket socket;
     private BufferedReader reader;
     private BufferedWriter writer;
-    private String isim;
+    private ArrayList<String> mesajlar = new ArrayList<>();
 
     public Client(Socket socket) {
         try {
@@ -40,14 +42,20 @@ public class Client {
             @Override
             public void run() {
                 String receivedMessage;
+                int i = 0;
                 while (socket.isConnected()) {
                     try {
                         receivedMessage = reader.readLine();
-                        System.out.println(receivedMessage);
+                        mesajlar.add(receivedMessage);
+                        if (mesajlar.contains(receivedMessage))
+                            break;
                     } catch (IOException e) {
                         closeServer(socket, reader, writer);
                     }
+                    i++;
                 }
+                System.out.println(mesajlar.getFirst());
+                mesajlar.clear();
             }
         }).start();
     }
