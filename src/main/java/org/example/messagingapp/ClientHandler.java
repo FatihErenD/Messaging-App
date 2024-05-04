@@ -1,82 +1,40 @@
 package org.example.messagingapp;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.awt.*;
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler extends Thread {
 
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    private DatagramSocket socket;
+    private byte[] incoming = new byte[256];
 
-    private String clientUsername;
+    private TextField textField;
+    private VBox vBox;
 
-    public ClientHandler(Socket socket) {
-        try {
-            this.socket = socket;
-            this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            clientHandlers.add(this);
-        }
-        catch (IOException e) {
-            closeServer(socket, reader, writer);
-            e.printStackTrace();
-        }
+    public ClientHandler(DatagramSocket socket, VBox vBox) {
+        this.socket = socket;
+        this.vBox = vBox;
     }
 
-    //ayrı threadde çalışır
     @Override
     public void run() {
-        String messageFromClient;
-        while(socket.isConnected()) {
-            try
-            {
-                messageFromClient = reader.readLine();
-                broadcastMessage(messageFromClient);
-            } catch (IOException e) {
-                closeServer(socket, reader, writer);
-                break;
-            }
-        }
-    }
-
-    public void broadcastMessage(String message) {
-        for (ClientHandler clientHandler: clientHandlers) {
+        System.out.println("starting thread");
+        while (true) {
+            DatagramPacket packet = new DatagramPacket(incoming, incoming.length);
             try {
-                //if (!clientHandler.clientUsername.equals(this.clientUsername)) {
-                clientHandler.writer.write(message);
-                clientHandler.writer.newLine();
-                //zorla gönder
-                clientHandler.writer.flush();
-                //}
+                socket.receive(packet);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            catch(IOException e) {
-                closeServer(socket, reader, writer);
-            }
-        }
-    }
-
-    public void removeClientHandler() {
-        clientHandlers.remove(this);
-    }
-
-    public void closeServer(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
-        removeClientHandler();
-        try {
-            if (bufferedReader != null) {
-                bufferedReader.close();
-            }
-            if (bufferedWriter != null) {
-                bufferedWriter.close();
-            }
-            if (socket != null) {
-                socket.close();
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            String message = new String(packet.getData(), 0, packet.getLength()) + "\n";
+            Controller.showReceivedMessage(message, vBox);
         }
     }
 }

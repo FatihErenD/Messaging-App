@@ -17,11 +17,26 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #404040;" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="vBox_Messages" layoutX="1.0" prefHeight="481.0" prefWidth="681.0">
+            <VBox fx:id="vBox_Messages" layoutX="1.0" prefHeight="481.0" prefWidth="681.0" style="-fx-background-color: #404040;">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </VBox>
+            <Pane fx:id="pane_add" prefHeight="484.0" prefWidth="681.0" style="-fx-background-color: #404040;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="newUsername" layoutX="308.0" layoutY="208.0" prefHeight="34.0" prefWidth="323.0" styleClass="textField" stylesheets="@css-file.css" />
+                  <Label layoutX="47.0" layoutY="215.0" text="Alıcının Kullanıcı Adını Giriniz:" textFill="#908ff8">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="loginButton" layoutX="252.0" layoutY="268.0" mnemonicParsing="false" onMouseClicked="#onAddNew" prefHeight="40.0" prefWidth="141.0" stylesheets="@css-file.css" text="Kişi Ekle" textFill="#47479e">
+                     <font>
+                        <Font name="Serif Bold" size="22.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
             <Pane layoutY="482.0" prefHeight="72.0" prefWidth="680.0" style="-fx-background-color: #252525;">
                <children>
                   <TextField fx:id="messageField" layoutX="14.0" layoutY="15.0" prefHeight="34.0" prefWidth="580.0" styleClass="textField" stylesheets="@css-file.css" />
@@ -63,7 +78,7 @@
       <AnchorPane prefHeight="594.0" prefWidth="263.0" style="-fx-background-color: #282828;" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="vBox" prefHeight="483.0" prefWidth="264.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="12.0" layoutY="483.0" prefHeight="59.0" prefWidth="240.0" styleClass="newLabel" stylesheets="@css-file.css" text="Yeni Kişi Ekle" textAlignment="CENTER" textFill="#908ff8">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="12.0" layoutY="483.0" onMouseClicked="#addNew" prefHeight="59.0" prefWidth="240.0" styleClass="newLabel" stylesheets="@css-file.css" text="Yeni Kişi Ekle" textAlignment="CENTER" textFill="#908ff8">
                <font>
                   <Font name="Consolas" size="18.0" />
                </font>

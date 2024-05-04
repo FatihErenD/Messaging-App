@@ -1,81 +1,54 @@
 package org.example.messagingapp;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.net.*;
 
-public class Client {
-    private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
-    private ArrayList<String> mesajlar = new ArrayList<>();
+public class Client extends Thread {
+    private static DatagramSocket socket;
+    private static InetAddress address;
 
-    public Client(Socket socket) {
+    private static final int SERVER_PORT = 1234;
+
+    private String username;
+    private VBox vBox;
+
+
+    public Client(String username, VBox vBox) {
+        this.username = username;
+        this.vBox = vBox;
+    }
+
+    @Override
+    public void run() {
         try {
-            this.socket = socket;
-            this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            socket = new DatagramSocket();
+            address = InetAddress.getByName("localhost");
+        } catch (UnknownHostException | SocketException e) {
+            throw new RuntimeException(e);
+        }
+
+        ClientHandler clientThread = new ClientHandler(socket, vBox);
+        clientThread.start();
+
+        byte[] saveToServer = ("init;+0000:" + username).getBytes();
+        DatagramPacket initialize = new DatagramPacket(saveToServer, saveToServer.length, address, SERVER_PORT);
+        try {
+            socket.send(initialize);
         } catch (IOException e) {
-            closeServer(socket, reader, writer);
+            throw new RuntimeException(e);
         }
     }
 
     public void sendMessage(String message) {
+        byte[] msg;
+        msg = message.getBytes();
+        DatagramPacket send = new DatagramPacket(msg, msg.length, address, SERVER_PORT);
         try {
-            writer.write(message);
-            writer.newLine();
-            writer.flush();
+            socket.send(send);
         } catch (IOException e) {
-            closeServer(socket, reader, writer);
+            throw new RuntimeException(e);
         }
-    }
-
-    public void receiveMessage() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String receivedMessage;
-                int i = 0;
-                while (socket.isConnected()) {
-                    try {
-                        receivedMessage = reader.readLine();
-                        mesajlar.add(receivedMessage);
-                        if (mesajlar.contains(receivedMessage))
-                            break;
-                    } catch (IOException e) {
-                        closeServer(socket, reader, writer);
-                    }
-                    i++;
-                }
-                System.out.println(mesajlar.getFirst());
-                mesajlar.clear();
-            }
-        }).start();
-    }
-
-    public void closeServer(Socket socket, BufferedReader reader, BufferedWriter writer) {
-        try {
-            if (reader != null)
-                reader.close();
-            if (writer != null)
-                socket.close();
-            if (socket != null)
-                socket.close();
-        } catch (IOException e) {
-            System.out.println("Hata...");
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1234);
-        Client client = new Client(socket);
-        client.receiveMessage();
     }
 }
