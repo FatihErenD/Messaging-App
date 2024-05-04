@@ -281,7 +281,7 @@ public class Controller implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    vBox.getChildren().add(label);
+                    vBox.getChildren().add(hbox);
                 }
             });
         }
