@@ -49,19 +49,22 @@ public class Server {
                 int indexOfReceiverName = message.indexOf(":");
                 String receiver = message.substring(0, indexOfReceiverName);
                 System.out.println(receiver);
+                System.out.println(receiver);
                 System.out.println(clientPorts.getFirst());
 
                 byte[] byteMessage = message.getBytes();
 
 
                 int receiverIndex = clientNames.indexOf(receiver);
-                int receiverPort = clientPorts.get(receiverIndex);
+                if (receiverIndex != -1) {
+                    int receiverPort = clientPorts.get(receiverIndex);
 
-                DatagramPacket packetToSent = new DatagramPacket(byteMessage, byteMessage.length, address, receiverPort);
-                try {
-                    socket.send(packetToSent);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    DatagramPacket packetToSent = new DatagramPacket(byteMessage, byteMessage.length, address, receiverPort);
+                    try {
+                        socket.send(packetToSent);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

@@ -243,6 +243,7 @@ public class Controller implements Initializable {
             clientToSend.add(clientSent);
             focusedClientName = clientSent;
             clientSentName = clientSent;
+            vBox_Messages.getChildren().clear();
 
             hbox.setOnMouseClicked(e -> {
                 vBox_Messages.getChildren().clear();
