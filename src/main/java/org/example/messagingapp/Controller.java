@@ -96,7 +96,8 @@ public class Controller implements Initializable {
     @FXML
     private TextField newUsername;
 
-    private Client client; //= new Client("", vBox_Messages);
+    private Client client;
+
 
     @FXML
     void onCreateAccount(MouseEvent event) {
@@ -238,15 +239,18 @@ public class Controller implements Initializable {
             hbox.getChildren().add(label);
             vBox.getChildren().add(hbox);
 
+            VBox newMessageVBox = new VBox();
+            newMessageVBox.setStyle("-fx-background-color: #404040;");
+            newMessageVBox.setPrefHeight(481.0);
+            newMessageVBox.setPrefWidth(681.0);
+
             String clientSentName;
 
             clientToSend.add(clientSent);
             focusedClientName = clientSent;
             clientSentName = clientSent;
-            vBox_Messages.getChildren().clear();
 
             hbox.setOnMouseClicked(e -> {
-                vBox_Messages.getChildren().clear();
                 focusedClientName = clientSentName;
                 System.out.println(focusedClientName);
             });
