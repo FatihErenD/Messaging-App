@@ -253,9 +253,11 @@ public class Controller implements Initializable {
             hbox.setOnMouseClicked(e -> {
                 focusedClientName = clientSentName;
                 System.out.println(focusedClientName);
+                vBox_Messages.getChildren().clear();
             });
 
             scrollPane.toFront();
+            vBox_Messages.getChildren().clear();
         }
     }
 
