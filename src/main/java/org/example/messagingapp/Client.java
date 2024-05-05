@@ -13,11 +13,13 @@ public class Client extends Thread {
 
     private String username;
     private VBox vBox;
+    private VBox vBoxChats;
 
 
-    public Client(String username, VBox vBox) {
+    public Client(String username, VBox vBox, VBox vBoxChats) {
         this.username = username;
         this.vBox = vBox;
+        this.vBoxChats = vBoxChats;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class Client extends Thread {
             throw new RuntimeException(e);
         }
 
-        ClientHandler clientThread = new ClientHandler(socket, vBox);
+        ClientHandler clientThread = new ClientHandler(socket, vBox, vBoxChats);
         clientThread.start();
 
         byte[] saveToServer = ("init;+0000:" + username).getBytes();

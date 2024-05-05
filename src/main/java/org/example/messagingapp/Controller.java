@@ -9,12 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -31,7 +29,11 @@ public class Controller implements Initializable {
     private String clientSent;
     private static String focusedClientName;
 
-    private ArrayList<String> clientToSend = new ArrayList<>();
+    private static ArrayList<String> clientToSend = new ArrayList<>();
+    private static ArrayList<LinkedListForMessages> chats = new ArrayList<>();
+
+    private Client client;
+    private static LinkedListForMessages focusedMessages;
 
     @FXML
     private Pane login_screen;
@@ -43,12 +45,6 @@ public class Controller implements Initializable {
     private BorderPane main_screen;
 
     @FXML
-    private Label hesap;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
     private PasswordField password;
 
     @FXML
@@ -56,12 +52,6 @@ public class Controller implements Initializable {
 
     @FXML
     private Label yanlisHesap;
-
-    @FXML
-    private Button Create;
-
-    @FXML
-    private Label login;
 
     @FXML
     private PasswordField password_create1;
@@ -79,10 +69,13 @@ public class Controller implements Initializable {
     private Label user_name;
 
     @FXML
-    private VBox vBox;
+    private ScrollPane scrollPaneChats;
 
     @FXML
-    private ScrollPane scrollPane;
+    private VBox vBoxChats;
+
+    @FXML
+    private ScrollPane scrollPaneMessages;
 
     @FXML
     private VBox vBox_Messages;
@@ -95,8 +88,6 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField newUsername;
-
-    private Client client;
 
 
     @FXML
@@ -134,7 +125,7 @@ public class Controller implements Initializable {
                             username.clear();
                             password.clear();
                             yanlisHesap.setText("");
-                            this.client = new Client(clientName, vBox_Messages);
+                            this.client = new Client(clientName, vBox_Messages, vBoxChats);
                             client.start();
                             break;
                         }
@@ -183,22 +174,11 @@ public class Controller implements Initializable {
             messageField.clear();
             codedMessage = (clientSent + ": " +message + " :" + clientName);
 
-            HBox hbox = new HBox(100);
-            hbox.setAlignment(Pos.CENTER_RIGHT);
-            hbox.setPadding(new Insets(5, 5, 5, 10));
-            hbox.setSpacing(3);
-
-            Label label = new Label(message);
-            label.setStyle("""
-                        -fx-background-color:  #252525;
-                        -fx-background-radius:  15;
-                        -fx-font-family: Consolas;
-                        -fx-font-size: 18px;
-                        -fx-text-fill: #e1d9ff;""");
-            label.setPadding(new Insets(5, 5, 5, 10));
-            hbox.getChildren().add(label);
+            HBox hbox = sentMessageHBox(message);
 
             vBox_Messages.getChildren().add(hbox);
+
+            focusedMessages.append(message, true);
 
             client.sendMessage(codedMessage);
         }
@@ -206,7 +186,7 @@ public class Controller implements Initializable {
 
     @FXML
     void onExitClicked(MouseEvent event) {
-        vBox.getChildren().clear();
+        vBoxChats.getChildren().clear();
         vBox_Messages.getChildren().clear();
         login_screen.toFront();
     }
@@ -237,72 +217,195 @@ public class Controller implements Initializable {
 
 
             hbox.getChildren().add(label);
-            vBox.getChildren().add(hbox);
-
-            VBox newMessageVBox = new VBox();
-            newMessageVBox.setStyle("-fx-background-color: #404040;");
-            newMessageVBox.setPrefHeight(481.0);
-            newMessageVBox.setPrefWidth(681.0);
+            vBoxChats.getChildren().add(hbox);
 
             String clientSentName;
 
             clientToSend.add(clientSent);
             focusedClientName = clientSent;
             clientSentName = clientSent;
+            vBox_Messages.getChildren().clear();
+
+            LinkedListForMessages newMessages = new LinkedListForMessages(clientSent);
+            chats.add(newMessages);
+            focusedMessages = newMessages;
 
             hbox.setOnMouseClicked(e -> {
                 focusedClientName = clientSentName;
                 System.out.println(focusedClientName);
                 vBox_Messages.getChildren().clear();
+                focusedMessages = newMessages;
+                scrollPaneMessages.toFront();
+
+                int size = focusedMessages.getSize();
+                LinkedListForMessages.Node temp = focusedMessages.first;
+
+                for (int i = 0; i < size; i++) {
+                    HBox messageHBox;
+                    if (temp.isSenderMessage())
+                        messageHBox = sentMessageHBox(temp.getMessageInfo());
+                    else
+                        messageHBox = receivedMessageHBox(temp.getMessageInfo());
+                    temp = temp.next;
+                    vBox_Messages.getChildren().add(messageHBox);
+                }
             });
 
-            scrollPane.toFront();
+            scrollPaneMessages.toFront();
             vBox_Messages.getChildren().clear();
         }
     }
 
-    public static void showReceivedMessage(String receivedMessage, VBox vBox) {
-        int indexOfReceiver = receivedMessage.indexOf(":");
-        int indexOfCode = receivedMessage.lastIndexOf(":");
-        String receiver = receivedMessage.substring(0, indexOfReceiver);
-        String sender = receivedMessage.substring(indexOfCode + 1, receivedMessage.length() - 1);
-        System.out.println("girdi");
-        String encodedMessage = receivedMessage.substring(indexOfReceiver + 1, indexOfCode);
-        System.out.println(sender);
-        System.out.println(focusedClientName);
-        if (sender.equals(focusedClientName)) {
-            HBox hbox = new HBox(100);
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            hbox.setPadding(new Insets(5, 5, 5, 10));
-            hbox.setSpacing(3);
+    private static HBox sentMessageHBox(String message) {
+        HBox hbox = new HBox(100);
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setPadding(new Insets(5, 5, 5, 10));
+        hbox.setSpacing(3);
 
-            Label label = new Label(encodedMessage);
-            label.setStyle("""
+        Label label = new Label(message);
+        label.setStyle("""
+                        -fx-background-color:  #252525;
+                        -fx-background-radius:  15;
+                        -fx-font-family: Consolas;
+                        -fx-font-size: 18px;
+                        -fx-text-fill: #e1d9ff;""");
+        label.setPadding(new Insets(5, 5, 5, 10));
+        hbox.getChildren().add(label);
+
+        return hbox;
+    }
+
+    private static HBox receivedMessageHBox(String message) {
+        HBox hbox = new HBox(100);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.setPadding(new Insets(5, 5, 5, 10));
+        hbox.setSpacing(3);
+
+        Label label = new Label(message);
+        label.setStyle("""
                     -fx-background-color:  #5f5fd3;
                     -fx-background-radius:  15;
                     -fx-font-family: Consolas;
                     -fx-font-size: 18px;
                     -fx-text-fill: #e1d9ff;""");
-            label.setPadding(new Insets(5, 5, 5, 10));
-            hbox.getChildren().add(label);
+        label.setPadding(new Insets(5, 5, 5, 10));
+        hbox.getChildren().add(label);
+
+        return hbox;
+    }
+
+    public static void showReceivedMessage(String receivedMessage, VBox vBox, VBox vBoxChats) {
+        int indexOfReceiver = receivedMessage.indexOf(":");
+        int indexOfCode = receivedMessage.lastIndexOf(":");
+
+        String sender = receivedMessage.substring(indexOfCode + 1, receivedMessage.length() - 1);
+        String encodedMessage = receivedMessage.substring(indexOfReceiver + 1, indexOfCode);
+
+        if (sender.equals(focusedClientName)) {
+            HBox hbox = receivedMessageHBox(encodedMessage);
+
+            focusedMessages.append(encodedMessage, false);
+
+            if (!clientToSend.contains(sender))
+                clientToSend.add(sender);
+
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     vBox.getChildren().add(hbox);
                 }
             });
+        } else {
+            if (!clientToSend.contains(sender))
+                clientToSend.add(sender);
+
+            int chatIndex = -1;
+            for (int i = 0; i < chats.size(); i++) {
+                System.out.println(chats.get(i).getChatName());
+                if (Objects.equals(chats.get(i).getChatName(), sender)) {
+                    chatIndex = i;
+                    System.out.println("girdi: " + chatIndex);
+                    break;
+                }
+            }
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Yeni Mesajınız Var");
+                    alert.setHeaderText(null);
+                    alert.setContentText(sender + " size mesaj gönderdi.");
+                    alert.showAndWait();
+                }
+            });
+            if (chatIndex == -1) {
+                HBox hbox = new HBox();
+                hbox.styleProperty().bind(Bindings.when(hbox.hoverProperty())
+                        .then("-fx-background-color: #404040;")
+                        .otherwise("-fx-background-color: #252525;"));
+                hbox.setPadding(new Insets(5, 5, 5, 10));
+
+                Label label = new Label(sender);
+                label.setStyle("""
+                        -fx-font-family: Consolas;
+                        -fx-font-size: 24px;
+                        -fx-text-fill: #908ff8;
+                        """);
+                label.setPadding(new Insets(5, 5, 5, 10));
+
+                hbox.getChildren().add(label);
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        vBoxChats.getChildren().add(hbox);
+                    }
+                });
+
+                LinkedListForMessages newMessages = new LinkedListForMessages(sender);
+                chats.add(newMessages);
+
+                hbox.setOnMouseClicked(e -> {
+                    focusedClientName = newMessages.getChatName();
+                    vBox.getChildren().clear();
+                    focusedMessages = newMessages;
+                    vBox.toFront();
+
+                    int size = focusedMessages.getSize();
+                    LinkedListForMessages.Node temp = focusedMessages.first;
+
+                    for (int i = 0; i < size; i++) {
+                        HBox messageHBox;
+                        if (temp.isSenderMessage())
+                            messageHBox = sentMessageHBox(temp.getMessageInfo());
+                        else
+                            messageHBox = receivedMessageHBox(temp.getMessageInfo());
+                        temp = temp.next;
+                        vBox.getChildren().add(messageHBox);
+                    }
+                });
+            }
+            chatIndex = chats.size() - 1;
+
+            chats.get(chatIndex).append(encodedMessage, false);
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneMessages.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneMessages.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        scrollPaneChats.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneChats.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        vBoxChats.toFront();
+
 
         vBox_Messages.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scrollPane.setVvalue((Double) t1);
+                scrollPaneMessages.setVvalue((Double) t1);
             }
         });
     }

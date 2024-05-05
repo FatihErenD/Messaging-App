@@ -1,13 +1,13 @@
 package org.example.messagingapp;
 
 
-import java.io.*;
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 
 
 public class Server {
-    private static byte[] incoming = new byte[256];
+    private static byte[] received = new byte[256];
     private static final int PORT = 1234;
 
     private static DatagramSocket socket;
@@ -27,7 +27,7 @@ public class Server {
         System.out.println("Server started on port " + PORT);
 
         while (true) {
-            DatagramPacket packet = new DatagramPacket(incoming, incoming.length);
+            DatagramPacket packet = new DatagramPacket(received, received.length);
             try {
                 socket.receive(packet);
             } catch (IOException e) {
@@ -47,9 +47,6 @@ public class Server {
             else {
                 int indexOfReceiverName = message.indexOf(":");
                 String receiver = message.substring(0, indexOfReceiverName);
-                System.out.println(receiver);
-                System.out.println(receiver);
-                System.out.println(clientPorts.getFirst());
 
                 byte[] byteMessage = message.getBytes();
 
