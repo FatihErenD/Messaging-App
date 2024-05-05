@@ -43,6 +43,12 @@ public class Server {
                 int indexOfClientName = message.indexOf(":");
                 String clientName = message.substring(indexOfClientName + 1);
                 clientNames.add(clientName);
+            } else if (message.contains("init;+1111:")) {
+                int indexOfClientName = message.indexOf(":");
+                String clientName = message.substring(indexOfClientName + 1);
+                int index = clientNames.indexOf(clientName);
+                clientNames.remove(index);
+                clientPorts.remove(index);
             }
             else {
                 int indexOfReceiverName = message.indexOf(":");

@@ -188,6 +188,20 @@ public class Controller implements Initializable {
     void onExitClicked(MouseEvent event) {
         vBoxChats.getChildren().clear();
         vBox_Messages.getChildren().clear();
+
+        client.sendMessage("init;+1111:" + clientName);
+
+        clientName = null;
+        clientSent = null;
+        focusedMessages = null;
+        focusedClientName = null;
+        client = null;
+
+        clientToSend = new ArrayList<>();
+        chats = new ArrayList<>();
+
+        yanlisHesap.setText("");
+
         login_screen.toFront();
     }
 
