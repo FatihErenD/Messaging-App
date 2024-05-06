@@ -172,7 +172,7 @@ public class Controller implements Initializable {
             String codedMessage;
             String message = messageField.getText();
             messageField.clear();
-            codedMessage = (clientSent + ": " +message + " :" + clientName);
+            codedMessage = (focusedClientName + ": " +message + " :" + clientName);
 
             HBox hbox = sentMessageHBox(message);
 
@@ -382,6 +382,7 @@ public class Controller implements Initializable {
 
                 hbox.setOnMouseClicked(e -> {
                     focusedClientName = newMessages.getChatName();
+                    System.out.println(focusedClientName);
                     vBox.getChildren().clear();
                     focusedMessages = newMessages;
                     vBox.toFront();
