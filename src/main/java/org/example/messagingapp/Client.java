@@ -9,7 +9,7 @@ public class Client extends Thread {
     private static DatagramSocket socket;
     private static InetAddress address;
 
-    private static final int SERVER_PORT = 1234;
+    private static final int SERVER_PORT = 8080;
 
     private String username;
     private VBox vBox;
@@ -26,7 +26,7 @@ public class Client extends Thread {
     public void run() {
         try {
             socket = new DatagramSocket();
-            address = InetAddress.getByName("localhost");
+            address = InetAddress.getByName("192.168.174.154");
         } catch (UnknownHostException | SocketException e) {
             throw new RuntimeException(e);
         }
